@@ -1,0 +1,45 @@
+name: Ejecutar Bot (Múltiples Enlaces)
+
+on:
+  schedule:
+    - cron: "48 0-23 * * *"  # Se ejecuta cada hora a los 48 minutos
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15  # Aumentado para cubrir 15 enlaces
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Configurar Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir selenium webdriver-manager
+
+      - name: Configurar pantalla virtual
+        run: |
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+
+      - name: Ejecutar script
+        env:
+          DISPLAY: ":99"
+        run: python bot.py  # Nombre de tu archivo Python
+
+      - name: Notificar en fallo
+        if: ${{ failure() }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.warning("Ejecución fallida del bot");
