@@ -35,7 +35,7 @@ jobs:
       - name: Ejecutar script
         env:
           DISPLAY: ":99"
-        run: python bot.py  # Nombre de tu archivo Python
+        run: python tu_script.py  # Nombre de tu archivo Python
 
       - name: Notificar en fallo
         if: ${{ failure() }}
