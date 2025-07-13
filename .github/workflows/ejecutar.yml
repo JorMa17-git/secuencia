@@ -2,7 +2,7 @@ name: Ejecutar Bot (Múltiples Enlaces)
 
 on:
   schedule:
-    - cron: "48 0-23 * * *"  # Se ejecuta cada hora a los 48 minutos
+    - cron: "15,45 * * * *"  # Se ejecuta cada hora a los 48 minutos
   workflow_dispatch:
 
 jobs:
